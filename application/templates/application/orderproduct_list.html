@@ -1,0 +1,102 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+{% block content %}
+{% if total and object_list.first %}
+    <form method="post">{% csrf_token %}
+        <div class="container">
+            {{ form|crispy }}
+            <br>
+            <div class="container-fluid">
+                <div class="row row-cols-1 row-cols-sm-1 row-cols-xl-3">
+                    <div class="col">
+                        <span class="text-info fs-3">Order # {{ object_list.first.order.id }}</span>
+                    </div>
+                    <div class="col text-center">
+                        <div class="d-grid col-8 mx-auto">
+                        <button type="submit" class="btn btn-warning" autofocus>Submit Cart</button>
+                    </div>
+                </div>
+                <div class="col text-end">
+                    <span class="text-info fs-3">Total : {{ total }}</span>
+                </div>
+            </div>
+        </div>
+    </form>
+{% endif %}
+<div class="d-flex justify-content-center">
+    <!-- text-light table-bordered border-secondary -->
+    <table class="table">
+        <tr>
+            <th style="width: 5%;"></th>
+            <th class="fs-5" style="width: 15%;">Product SKU</th>
+            <th class="fs-5">Product Title</th>
+            <th class="text-end fs-5" style="width: 6%;">Stock</th>
+            <th class="text-end fs-5" style="width: 6%;">Quantity</th>
+            <th class="text-end fs-5" style="width: 7%;">Price</th>
+            <th class="text-end fs-5" style="width: 8%;">Amount</th>
+            <th style="width: 5%;"></th>
+        </tr>
+        {% for object in object_list %}
+            {% if object.quantity > object.product.stock %}
+                <tr class="text-light bg-secondary">
+            {% else %}
+                <tr>
+            {% endif %}
+                <td class="text-center"><img src="{{ object.product.image.url }}" width="50"></td>
+                <td class="fs-6">{{ object.product.sku }}</td>
+                <td class="fs-6">{{ object.product.title }}</td>
+                <td class="text-end fs-6">{{ object.product.stock }}</td>
+                <td class="text-warning text-end fs-6">
+                    <!-- <input class="form-control form-control-sm text-end"
+                    type="number" min="1" max="{{ object.stock }}" step="1"
+                    placeholder="Enter Quantity" style="width: 100px;"
+                    name="product_id_{{object.id}}" id="product_id_{{object.id}}"
+                    hx-trigger="keyup[keyCode==13]"
+                    hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'
+                    hx-post="{% url 'application:OrderProductCreateUpdate' productid=object.id %}"
+                    hx-swap="outerHTML"
+                    hx-include="[name='product_id_{{object.id}}']" 
+                    hx-target="#button_product_id_{{object.id}}" 
+                    onkeypress="return event.charCode >= 48 && event.charCode <=57"
+                    value="{{ object.quantity }}"> -->
+                    {{ object.quantity }}
+                </td>
+                <!-- hx-on=
+                "htmx:afterRequest:
+                    $('#incart_product_id_{{object.id}}').text((this.value=='') ? 'In Cart: 0' : 'In Cart: ' + this.value);
+                    this.value='';
+                    " -->
+                <td class="text-secondary text-end fs-6">{{ object.price }}</td>
+                <td class="text-end fs-6">{{ object.amount }}</td>
+                <td class="text-danger text-center fs-6">
+                    <a href="{% url 'application:OrderProductDeleteView' product_id=object.id %}" class="btn btn-sm btn-danger">Delete</a>
+                    <!-- <button class="btn btn-sm btn-outline-danger" type="button" tabindex="-1"
+                        id="button_product_id_{{object.id}}"
+                        hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'
+                        hx-post="{% url 'application:OrderProductDelete' orderproductid=object.id %}"
+                        >
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash3" viewBox="0 0 16 16">
+                            <path d="M6.5 1h3a.5.5 0 0 1 .5.5v1H6v-1a.5.5 0 0 1 .5-.5ZM11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3A1.5 1.5 0 0 0 5 1.5v1H2.506a.58.58 0 0 0-.01 0H1.5a.5.5 0 0 0 0 1h.538l.853 10.66A2 2 0 0 0 4.885 16h6.23a2 2 0 0 0 1.994-1.84l.853-10.66h.538a.5.5 0 0 0 0-1h-.995a.59.59 0 0 0-.01 0H11Zm1.958 1-.846 10.58a1 1 0 0 1-.997.92h-6.23a1 1 0 0 1-.997-.92L3.042 3.5h9.916Zm-7.487 1a.5.5 0 0 1 .528.47l.5 8.5a.5.5 0 0 1-.998.06L5 5.03a.5.5 0 0 1 .47-.53Zm5.058 0a.5.5 0 0 1 .47.53l-.5 8.5a.5.5 0 1 1-.998-.06l.5-8.5a.5.5 0 0 1 .528-.47ZM8 4.5a.5.5 0 0 1 .5.5v8.5a.5.5 0 0 1-1 0V5a.5.5 0 0 1 .5-.5Z"/>
+                        </svg>
+                    </button> -->
+                    <!-- hx-target="#incart_product_id_{{object.id}}"
+                    hx-on=
+                    "
+                    htmx:afterRequest:
+                        $(this).prop('disabled', true);
+                        $(this).attr('hx-headers', '');
+                        $(this).attr('hx-post', '');
+                        $(this).attr('hx-target', '');
+                        
+                        $('#product_id_{{object.id}}').focus();
+                    "> -->
+                </td>
+            </tr>
+        {% empty %}
+            <tr>
+                <td colspan="8" class="text-center fs-3 text-warning">No Products found in the cart.</td>
+            </tr>
+        {% endfor %}
+    </table>
+</div>
+{% endblock content %}

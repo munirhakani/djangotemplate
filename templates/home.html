@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+{% block content %}
+{% if user.is_authenticated %}
+    <ul>
+        {% for brand in brand_object_list %}
+            <li>{{ brand.name }}</li>
+        {% endfor %}
+    </ul>
+{% else %}
+    <h3 class="text-danger">Please Login before testing</h3>
+{% endif %}
+{% endblock content %}

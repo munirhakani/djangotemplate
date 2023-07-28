@@ -1,0 +1,32 @@
+.nav-link:hover{
+    color:azure;
+    background-color:cornflowerblue;
+}
+
+.dropdown-item:hover {
+    color:azure;
+    background-color:cornflowerblue;
+}
+
+.text-coral {
+    color:coral;
+}
+
+/* .button-corn {
+    background-color:cornflowerblue;
+} */
+
+.text-cornflowerblue {
+    color:cornflowerblue;
+}
+
+.content-section {
+    padding: 10px 20px;
+    border: 1px solid #dddddd;
+    border-radius: 3px;
+}
+
+.btnCols {
+    width: 6%;
+    text-align: center;
+}

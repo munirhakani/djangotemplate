@@ -1,0 +1,31 @@
+import os
+from imghdr import what
+from PIL import Image
+from requests import get
+headers = {'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/50.0.2661.102 Safari/537.36'}
+
+
+def download(image_url, filename):
+    print(image_url)
+    foldername = filename[filename.find('-')+1:filename.find('-', filename.find('-')+1)]
+    path = 'downupload/images/' + foldername + '/'
+    if not os.path.exists(path): os.mkdir(path)
+
+    filename =  filename[:filename.find('-')] + filename[filename.find('-', filename.find('-')+1):]
+    filename = filename + image_url[-4:]
+
+    image_data = get(image_url, headers=headers).content
+    with open(path+filename, 'wb') as handler:
+        handler.write(image_data)
+
+    if what(path+filename):
+        print(path+filename)
+        image = Image.open(path+filename).convert('RGB').save(path+filename)
+        image = Image.open(path+filename)
+        resizedImage = image.resize((300, 300))
+        resizedImage.save(path+filename)
+
+
+url = 'https://www.hrwireless.com/uploads/products/large/APDSGN-3APod-J-1(2).jpg'
+sku = 'APDSGN-2APod-J'
+download(url, sku)

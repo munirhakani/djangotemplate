@@ -1,0 +1,7 @@
+{% extends 'base.html' %}
+{% block content %}
+{{ alert }}
+<script>
+    alert('{{ alert }}'.replaceAll('&amp;', '&'));
+</script>
+{% endblock content %}

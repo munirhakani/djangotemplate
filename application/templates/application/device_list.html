@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+{% block content %}
+{% regroup object_list by brand as grouped %}
+{% for group in grouped %}
+    {% for object in group.list %}
+        {% ifchanged %}
+            <br>
+            <span class="fs-1 text-coral">{{ object.brand }}</span>
+        {% endifchanged %}
+        {% if forloop.first or forloop.counter0|divisibleby:4 %}
+            <div class="row row-cols-1 row-cols-sm-2 row-cols-xl-4">
+        {% endif %}
+        <div class="col">
+            <a href="{% url 'application:ProductListView' device_id=object.id %}"
+                class="text-decoration-none">{{ object.name }}
+            </a>
+        </div>
+        {% if forloop.counter|divisibleby:4 or forloop.last %}</div>{% endif %}
+        {% ifchanged %}
+            <br>
+        {% endifchanged %}
+    {% endfor %}
+{% endfor %}
+<br>
+{% endblock content %}

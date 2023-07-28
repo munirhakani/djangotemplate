@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <style type="text/css">
+        /* Style the header: fixed position (always stay at the top) */
+        .header {
+            position: fixed;
+            top: 5;
+            margin-top: 5px;
+            z-index: 1;
+            text-align: center;
+            vertical-align: text-bottom;
+            padding-top: 10px;
+            width: 100%;
+            background-color: #f1f1f1;
+            font-size:xx-large;
+        }
+  
+        .content {
+            margin-top: 5px;
+            font-size: larger;
+            text-align: center;
+            text-emphasis-color: red;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        List of Person
+    </div>
+    <div class="content">
+        <table>
+            {% for object in object_list %}
+                <tr>
+                    <td>{{ object.name }}</td>
+                </tr>
+            {% empty %}
+                <tr>
+                    <td>No records found !!!</td>
+                </tr>
+            {% endfor %}
+        </table>
+    </div>    
+</body>
+</html>

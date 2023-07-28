@@ -1,0 +1,118 @@
+<div class="d-flex justify-content-center">
+    <div class="text-center">
+        <table>
+            <tr>
+                {% if object.image %}
+                    <td><img src="{{ object.image.url }}" alt="Hello World" height="300px"></td>
+                {% else %}
+                    {% load static %}
+                    <td><img src="{% static '/images/image-error.jpg' %}" alt="Hello World" height="300px"></td>
+                {% endif %}
+            </tr>
+            <tr>
+                <td class="text-warning">{{ object.sku }}</td>
+            </tr>
+            <!-- <tr>
+                <td class="text-secondary">{{ object.title }}</td>
+            </tr> -->
+            {% if user.is_authenticated %}
+                <tr>
+                    <td class="text-info">
+                        Stock : {{ object.stock }},
+                        Price : ${{ object.price }}
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        {% if object.quantityincart.id %}
+                            <span id="incart_product_id_{{object.id}}">In Cart: {{ object.quantityincart.quantity }}</span>
+                            <button class="btn btn-sm btn-outline-danger" type="button" tabindex="-1"
+                                id="button_product_id_{{object.id}}"
+                                hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'
+                                hx-post="{% url 'application:OrderProductDelete' orderproductid=object.quantityincart.id %}"
+                                hx-target="#incart_product_id_{{object.id}}"
+                                hx-on=
+                                "
+                                htmx:afterRequest:
+                                    $(this).prop('disabled', true);
+                                    $(this).attr('hx-headers', '');
+                                    $(this).attr('hx-post', '');
+                                    $(this).attr('hx-target', '');
+                                    
+                                    $('#product_id_{{object.id}}').focus();
+                                ">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash3" viewBox="0 0 16 16">
+                                    <path d="M6.5 1h3a.5.5 0 0 1 .5.5v1H6v-1a.5.5 0 0 1 .5-.5ZM11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3A1.5 1.5 0 0 0 5 1.5v1H2.506a.58.58 0 0 0-.01 0H1.5a.5.5 0 0 0 0 1h.538l.853 10.66A2 2 0 0 0 4.885 16h6.23a2 2 0 0 0 1.994-1.84l.853-10.66h.538a.5.5 0 0 0 0-1h-.995a.59.59 0 0 0-.01 0H11Zm1.958 1-.846 10.58a1 1 0 0 1-.997.92h-6.23a1 1 0 0 1-.997-.92L3.042 3.5h9.916Zm-7.487 1a.5.5 0 0 1 .528.47l.5 8.5a.5.5 0 0 1-.998.06L5 5.03a.5.5 0 0 1 .47-.53Zm5.058 0a.5.5 0 0 1 .47.53l-.5 8.5a.5.5 0 1 1-.998-.06l.5-8.5a.5.5 0 0 1 .528-.47ZM8 4.5a.5.5 0 0 1 .5.5v8.5a.5.5 0 0 1-1 0V5a.5.5 0 0 1 .5-.5Z"/>
+                                </svg>
+                            </button>
+                        {% else %}
+                            <span id="incart_product_id_{{object.id}}">In Cart: 0</span>
+                            <button class="btn btn-sm btn-outline-danger" type="button" tabindex="-1"
+                                id="button_product_id_{{object.id}}"
+                                hx-headers=''
+                                hx-post=""
+                                hx-target="#incart_product_id_{{object.id}}"
+                                hx-on=
+                                "htmx:afterRequest:
+                                    $(this).prop('disabled', true);
+                                    $(this).attr('hx-headers', '');
+                                    $(this).attr('hx-post', '');
+                                    $(this).attr('hx-target', '');
+                                    $('#product_id_{{object.id}}').focus();
+                                " disabled>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash3" viewBox="0 0 16 16">
+                                    <path d="M6.5 1h3a.5.5 0 0 1 .5.5v1H6v-1a.5.5 0 0 1 .5-.5ZM11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3A1.5 1.5 0 0 0 5 1.5v1H2.506a.58.58 0 0 0-.01 0H1.5a.5.5 0 0 0 0 1h.538l.853 10.66A2 2 0 0 0 4.885 16h6.23a2 2 0 0 0 1.994-1.84l.853-10.66h.538a.5.5 0 0 0 0-1h-.995a.59.59 0 0 0-.01 0H11Zm1.958 1-.846 10.58a1 1 0 0 1-.997.92h-6.23a1 1 0 0 1-.997-.92L3.042 3.5h9.916Zm-7.487 1a.5.5 0 0 1 .528.47l.5 8.5a.5.5 0 0 1-.998.06L5 5.03a.5.5 0 0 1 .47-.53Zm5.058 0a.5.5 0 0 1 .47.53l-.5 8.5a.5.5 0 1 1-.998-.06l.5-8.5a.5.5 0 0 1 .528-.47ZM8 4.5a.5.5 0 0 1 .5.5v8.5a.5.5 0 0 1-1 0V5a.5.5 0 0 1 .5-.5Z"/>
+                                </svg>
+                            </button>
+                        {% endif %}
+                    </td>
+                </tr>
+                <tr>
+                    <td><center>
+                        <div class="input-group mb-3 pt-2" style="width: 200px;">
+                            <input class="form-control form-control-sm"
+                                placeholder="Enter Quantity"
+                                type="number" min="1" max="{{ object.stock }}" step="1"
+                                name="product_id_{{object.id}}" id="product_id_{{object.id}}"
+                                hx-trigger="keyup[keyCode==13]"
+                                hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'
+                                hx-post="{% url 'application:OrderProductCreateUpdate' productid=object.id %}"
+                                hx-include="[name='product_id_{{object.id}}']"
+                                hx-swap="outerHTML"
+                                hx-target="#button_product_id_{{object.id}}" 
+                                hx-on=
+                                "htmx:afterRequest:
+                                    $('#incart_product_id_{{object.id}}').text((this.value=='') ? 'In Cart: 0' : 'In Cart: ' + this.value);
+                                    this.value='';
+                                "
+                                onkeypress="return event.charCode >= 48 && event.charCode <=57"
+                                {% if forloop.first %} autofocus {% endif %}
+                            >
+                            <button class="btn btn-sm btn-outline-success" type="button" tabindex="-1"
+                                name="abutton_product_id_{{object.id}}" id="abutton_product_id_{{object.id}}"
+                                hx-trigger="click"
+                                hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'
+                                hx-post="{% url 'application:OrderProductCreateUpdate' productid=object.id %}"
+                                hx-include="[name='product_id_{{object.id}}']"
+                                hx-swap="outerHTML"
+                                hx-target="#button_product_id_{{object.id}}" 
+                                hx-on=
+                                "htmx:afterRequest:
+                                    $('#incart_product_id_{{object.id}}').text($('#product_id_{{object.id}}').val()=='' ? 'In Cart: 0' : 'In Cart: ' + $('#product_id_{{object.id}}').val());
+                                    $('#product_id_{{object.id}}').val('');
+                                    $('#product_id_{{object.id}}').focus();
+                            "
+                            >
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-cart-plus" viewBox="0 0 16 16">
+                                    <path d="M9 5.5a.5.5 0 0 0-1 0V7H6.5a.5.5 0 0 0 0 1H8v1.5a.5.5 0 0 0 1 0V8h1.5a.5.5 0 0 0 0-1H9V5.5z"/>
+                                    <path d="M.5 1a.5.5 0 0 0 0 1h1.11l.401 1.607 1.498 7.985A.5.5 0 0 0 4 12h1a2 2 0 1 0 0 4 2 2 0 0 0 0-4h7a2 2 0 1 0 0 4 2 2 0 0 0 0-4h1a.5.5 0 0 0 .491-.408l1.5-8A.5.5 0 0 0 14.5 3H2.89l-.405-1.621A.5.5 0 0 0 2 1H.5zm3.915 10L3.102 4h10.796l-1.313 7h-8.17zM6 14a1 1 0 1 1-2 0 1 1 0 0 1 2 0zm7 0a1 1 0 1 1-2 0 1 1 0 0 1 2 0z"/>
+                                </svg>
+                            </button>
+                        </div>
+                    </center></td>
+                </tr>
+            {% endif %}
+        </table>
+        <br>
+    </div>
+</div>

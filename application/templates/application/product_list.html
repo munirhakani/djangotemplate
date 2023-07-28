@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container-fluid">
+    {% for object in object_list %}
+        {% if forloop.first %}
+            <center><p class="text-primary fs-1">{{ object.device }}</p></center>
+        {% endif %}
+        {% if forloop.first or forloop.counter0|divisibleby:4 %}
+        <div class="row row-cols-1 row-cols-sm-2 row-cols-xl-4">
+        {% endif %}
+            <div class="col">
+                {% include 'application/product.html' %}
+            </div>
+        {% if forloop.counter|divisibleby:4 or forloop.last %}</div>{% endif %}
+    {% endfor %}
+</div>
+{% endblock content %}

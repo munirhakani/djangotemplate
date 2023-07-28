@@ -1,0 +1,26 @@
+from imghdr import what
+from PIL import Image
+from requests import get
+headers = {'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/50.0.2661.102 Safari/537.36'}
+
+
+def downloadImage(image_url, filename):
+    print(f'Downloading {filename} ...')
+    content = get(image_url, headers=headers).content
+    with open(filename, 'wb') as handler:
+        print(f'Saving {filename} ...')
+        handler.write(content)
+
+    if what(filename):
+        print(f'Converting RBB and resizing {filename} ...')
+        image = Image.open(filename).convert('RGB').save(filename)
+        image = Image.open(filename)
+        _image = image.resize((300, 300))
+        _image.save(filename)
+        # _image = image.resize((300, 300))
+        # _image.save('_'+filename)
+
+
+# url = 'https://www.hrwireless.com/uploads/products/large/APDSGN-3APod-J-1(2).jpg'
+# filename = 'APDSGN-3APod-J.jpg'
+# download(url, filename)

@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container">
+    <div class="container-fluid">
+        <div class="row row-cols-1 row-cols-sm-1 row-cols-xl-3">
+            <div class="col text-start">
+                <span class="text-info fs-2">Order # {{ object.pk }}</span>
+            </div>
+            <div class="col text-center">
+                <a class="text-primary fs-2 text-decoration-none" href="{% url 'application:OrdersListView' %}">List of Orders</a>
+            </div>
+            <div class="col text-end">
+                <span class="text-info fs-2">Total : {{ total }}</span>
+            </div>
+        </div>
+    </div>
+    <div class="d-flex justify-content-center">
+        <!-- text-light table-bordered border-secondary -->
+        <table class="table">
+            <tr>
+                <th style="width: 5%;"></th>
+                <th class="fs-5" style="width: 15%;">Product SKU</th>
+                <th class="fs-5">Product Title</th>
+                <!-- <th class="text-end fs-5" style="width: 6%;">Stock</th> -->
+                <th class="text-end fs-5" style="width: 6%;">Quantity</th>
+                <th class="text-end fs-5" style="width: 7%;">Price</th>
+                <th class="text-end fs-5" style="width: 8%;">Amount</th>
+            </tr>
+            {% for object in object_list %}
+                <tr>
+                    <td class="text-center"><img src="{{ object.product.image.url }}" width="50"></td>
+                    <td class="fs-6">{{ object.product.sku }}</td>
+                    <td class="fs-6">{{ object.product.title }}</td>
+                    <!-- <td class="text-end fs-6">{{ object.product.stock }}</td> -->
+                    <td class="text-warning text-end fs-6">{{ object.quantity }}</td>
+                    <td class="text-secondary text-end fs-6">{{ object.price }}</td>
+                    <td class="text-end fs-6">{{ object.amount }}</td>
+                </tr>
+                {% endfor %}
+        </table>
+    </div>
+</div>
+{% endblock content %}

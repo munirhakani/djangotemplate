@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container">
+    {% if object_list.first %}
+        <center><p class="text-info fs-2">List of Orders</p></center>
+        <table class="table">
+            <tr>
+                <th class="text-end">Order #</th>
+                <th class="text-center">Date/Time</th>
+                <th class="text-end">Amount</th>
+                <th class="text-center">Status</th>
+                <th class="text-start">Notes</th>
+                <th class="text-center">Action</th>
+            </tr>
+            {% for object in object_list %}
+                <tr>
+                    <td class="text-end">{{ object.id }}</td>
+                    <td class="text-center">
+                        {% if object.submitted %}
+                            <span class="text-success">{{ object.submitted|date:'F d, Y H:i' }}</span>
+                        {% else %}
+                            <span class="text-info">Still in cart</span>
+                        {% endif %}
+                    </td>
+                    <td class="text-end">{{ object.total }}</td>
+                    <td class="text-center">
+                        {% if object.submitted %}
+                            {% if object.processed %}
+                                <span class="text-success">{{ object.processed|date:'F d, Y H:i' }}</span>
+                            {% else %}
+                                <span class="text-warning">Under processing</span>
+                            {% endif %}
+                        {% endif %}
+                    </td>
+                    <td>{% if object.notes %}{{ object.notes }}{% endif %}</td>
+                    <td class="text-center">
+                        <a class="btn btn-sm btn-outline-secondary" href="{% url 'application:OrderDetailView' pk=object.pk %}">View</a>
+                    </td>
+                </tr>
+            {% endfor %}
+        </table>
+    {% else %}
+        <table class="table table-borderless">
+            <tr>
+                <td class="text-center">
+                    <span class="text-warning fs-3">No orders yet.</span>
+                </td>
+            </tr>
+        </table>
+    {% endif %}
+</div>
+{% endblock content %}
