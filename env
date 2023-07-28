@@ -1,9 +1,0 @@
-SECRET_KEY = 'django-insecure-#3n@c9$=8+f_#7wfm#&8%#efo=fuwmab5m^!1#s)+!=yag&5g7'
-
-DEBUG = 1
-
-EMAIL_HOST = 'smtp-relay.sendinblue.com'
-EMAIL_USE_TLS = True
-EMAIL_PORT = 587
-EMAIL_HOST_USER = 'munirhakani@gmail.com'
-EMAIL_HOST_PASSWORD = 'bd3LYAhfREV6GDK2'
